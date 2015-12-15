@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void inputNumber(View v) {
+        reset();
+
         String mStr = mInput.getText().toString();
 
         // n자리 숫자를 입력하지 않았을 경우 오류 처리
@@ -74,17 +76,25 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+
+        boolean isTmp = false;
         for (int i = 0; i < number; i++) {
             int inputNumber = Integer.parseInt(mStr.substring(i, i + 1));
             if (input.contains(inputNumber)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
-                builder.setTitle("에러");
-                builder.setMessage("중복된 숫자 발견");
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.show();
+                isTmp = true;
+                break;
             } else {
-                input.add(i, inputNumber);
+                input.add(inputNumber);
             }
+        }
+
+        if (isTmp) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
+            builder.setTitle("에러");
+            builder.setMessage("중복된 숫자 발견");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
+            return;
         }
 
         for (int i = 0; i < number; i++) {
@@ -108,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
             reset();
         } else if (strike == number) { // 정답일 경우
             long end = System.currentTimeMillis();
-            
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
             builder.setTitle("정답");
-            builder.setMessage(mStr + ", " + (end-start)/1000 + "초 걸리셨습니다. 다시하시겠습니까?");
+            builder.setMessage(mStr + ", " + (end - start) / 1000 + "초 걸리셨습니다. 다시하시겠습니까?");
             builder.setNegativeButton(android.R.string.cancel, null);
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
