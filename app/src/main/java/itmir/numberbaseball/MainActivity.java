@@ -20,12 +20,14 @@ public class MainActivity extends AppCompatActivity {
     ListView mListView;
     Adapter mAdapter;
 
-    final int number = 3; // n자리수 (1~10자리)
+    final int number = 4; // n자리수 (1~10자리)
     int strike = 0; // 스트라이크 선언
     int ball = 0; // 볼 선언
 
     List<Integer> answer = new ArrayList<Integer>();
     List<Integer> input = new ArrayList<Integer>();
+
+    long start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.mListView);
         mAdapter = new Adapter(this);
         mListView.setAdapter(mAdapter);
+
+        start = System.currentTimeMillis();
 
         init();
     }
@@ -103,9 +107,11 @@ public class MainActivity extends AppCompatActivity {
             mAdapter.addItem(mStr, "아웃!");
             reset();
         } else if (strike == number) { // 정답일 경우
+            long end = System.currentTimeMillis();
+            
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
             builder.setTitle("정답");
-            builder.setMessage(mStr + " 정답입니다, 다시하시겠습니까?");
+            builder.setMessage(mStr + ", " + (end-start)/1000 + "초 걸리셨습니다. 다시하시겠습니까?");
             builder.setNegativeButton(android.R.string.cancel, null);
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
